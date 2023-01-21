@@ -2,7 +2,8 @@
 #include <math.h>
 
 int main() {
-    int v,i,p;
+    int v;
+    long long i,p;
     for(v=i=p=0; !feof(stdin); i++) {
         if (!(i&3))
             v |= getchar()<<6;
