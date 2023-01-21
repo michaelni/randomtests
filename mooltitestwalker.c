@@ -2,11 +2,15 @@
 #include <math.h>
 
 int main() {
-    int v;
+    int v, c;
     long long i,p;
-    for(v=i=p=0; !feof(stdin); i++) {
-        if (!(i&3))
-            v |= getchar()<<6;
+    for(v=i=p=0; 1; i++) {
+        if (!(i&3)) {
+            c = getchar();
+            if (c == EOF)
+                break;
+            v |= c<<6;
+        }
         if (i>2)
             p += (v&195)%65 ? -1 : 3;
         v>>=2;
