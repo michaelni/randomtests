@@ -12,7 +12,8 @@ int main() {
         if (!(i&3))
             v |= (c = getchar())<<6;
     }
-    printf("mooltiness: %8.2f expected: < 1 in 68%% cases, < 2 in 95%%, < 3 in 99.7%%\n",
-           fabs(4*p-i) / sqrt(3*i));
+    double d = fabs(4*p-i) / sqrt(3*i);
+    printf("mooltiness: %8.2f, this or larger is expected %.2LG %% of the time in random data.\n",
+           d, erfcl(d/sqrt(2))*100);
     return 0;
 }
