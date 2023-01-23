@@ -19,7 +19,7 @@ int main() {
             k++;
             p += X;
         }
-        cycle[x] = cycle[x]*X + X;
+        cycle[x] = cycle[x]*X + X + (x==31 || x==63 || x==95);
 
         v>>=2;
         if (!(i&3))
