@@ -4,22 +4,26 @@
 int main() {
     int v, c;
     long long i,p,k;
+    int score[96] = {0};
     int cycle[96] = {0};
     c=v=getchar();
     for(p=i=k=0; c!=EOF; i++) {
         int X = !((v^v>>6)&3);
         int x = i % 96;
 
-        int max = 2;
+        int max = 1;
         for (int j = 0; j<96; j++)
-            if (cycle[j] > max)
-                max = cycle[j];
+            if (score[j] > max)
+                max = score[j];
 
-        if (cycle[x] >= max) {
+        if (score[x] >= max) {
             k++;
             p += X;
         }
-        cycle[x] = cycle[x]*X + X + (x==31 || x==63 || x==95);
+        if (!X && cycle[x] > 16)
+            printf("Run %4d at phase %2d\n", cycle[x], x);
+        cycle[x] = X*cycle[x] + X;
+        score[x] = cycle[x] + 4*((x&31) == 31);
 
         v>>=2;
         if (!(i&3))
