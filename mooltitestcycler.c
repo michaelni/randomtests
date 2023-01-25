@@ -5,6 +5,7 @@ int main() {
     int v, c;
     long long i,p,k;
     int score[96] = {0};
+    score[31] = 1;
     int cycle[96] = {0};
     int max = 1;
     c=v=getchar();
