@@ -20,7 +20,7 @@ int main() {
 
     c=v=getchar();
     for(long long i=0; c!=EOF; i++) {
-        int X = (v&1) ^ ((v>>1)&1);
+        int X = (v^(v>>1))&1;
         histogram[i%3][X]++;
 
         v>>=2;
