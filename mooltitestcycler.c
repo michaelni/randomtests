@@ -1,14 +1,32 @@
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 
-int main() {
+int isAccel;
+
+static inline int get() {
+    if (isAccel) {
+        int a = getchar(); getchar();
+        int b = getchar(); getchar();
+        int c = getchar(); getchar();
+        int d = getchar(); getchar();
+        if (d == EOF)
+            return EOF;
+        return (a&3) + 4*(b&3) + 16*(c&3) + 64*(d&3);
+    } else {
+        return getchar();
+    }
+}
+
+int main(int argc, char **argv) {
     int v, c;
     long long i,p,k;
     int score[96] = {0};
     score[31] = 1;
     int cycle[96] = {0};
     int max = 1;
-    c=v=getchar();
+    isAccel = argc > 1 && !strcmp(argv[1], "-a");
+    c=v=get();
     for(p=i=k=0; c!=EOF; i++) {
         int X = !((v^v>>6)&3);
         int x = i % 96;
@@ -33,7 +51,7 @@ int main() {
 
         v>>=2;
         if (!(i&3))
-            v |= (c = getchar())<<6;
+            v |= (c = get())<<6;
     }
     double d = fabs(4*p-k) / sqrt(3*k);
     printf("moolticycles: %8.2f, this or larger is expected %.2LG %% of the time in random data.\n",
