@@ -1,5 +1,5 @@
 
-all: mooltitestwalker mooltitestcycler mooltitestshaker
+all: mooltitestwalker mooltitestcycler mooltitestshaker moolitac
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $< -O3 -Wall
@@ -13,3 +13,5 @@ mooltitestcycler: mooltitestcycler.o
 mooltitestshaker: mooltitestshaker.o
 	$(CC) $(LDFLAGS) -o $@ $< -lm
 	
+moolitac: moolitac.o
+	$(CC) $(LDFLAGS) -o $@ $< -lm
