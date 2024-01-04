@@ -21,7 +21,7 @@ static unsigned __int128 const increment  = ((unsigned __int128)6364136223846793
 typedef uint64_t STATET;
 typedef uint32_t OUTT;
 static uint64_t const multiplier = 6364136223846793005u;
-static uint64_t const increment  = 1442695040888963407u;	// Or an arbitrary odd constant
+static uint64_t const increment  = 1442695040888963407u;
 #endif
 
 
@@ -40,25 +40,25 @@ static const STATET MSB = (STATET)(-1) << EXIT_BITS;
 
 static OUTT rotr(OUTT x, unsigned r)
 {
-	return x >> (r & ROTATE_MASK) | x << (-r & ROTATE_MASK);
+    return x >> (r & ROTATE_MASK) | x << (-r & ROTATE_MASK);
 }
 
 OUTT pcg(STATET *state)
 {
-	STATET x = *state;
-	unsigned count = (unsigned)(x >> ROTATE_SRC);
+    STATET x = *state;
+    unsigned count = (unsigned)(x >> ROTATE_SRC);
 
-	*state = x * multiplier + increment;
-	x ^= x >> MIX_BITS;
-	return rotr((OUTT)(x >> EXIT_BITS), count);	// 27 = 32 - 5
+    *state = x * multiplier + increment;
+    x ^= x >> MIX_BITS;
+    return rotr((OUTT)(x >> EXIT_BITS), count);
 }
 
 static STATET inv_multiplier = (STATET)0-1;
 
 void pcg_init(STATET *state, STATET seed)
 {
-	*state = seed + increment;
-	(void)pcg(state);
+    *state = seed + increment;
+    (void)pcg(state);
 }
 
 #define FFMIN(a,b) ((a) > (b) ? (b) : (a))
@@ -123,13 +123,13 @@ static int make_a_table(STATET *table, int bits)
 #define LUT_SIZE (1<<LUT_BITS)
     uint32_t *lut = malloc(sizeof(*lut) * LUT_SIZE);
     memset(lut, 0, sizeof(*lut) * LUT_SIZE);
-printf("Making LUT %p\n", lut);
+    printf("Making LUT %p\n", lut);
     v = 0;
     for(int i = 0; i < (1<<(56 - MEM_BITS)); i++) {
         lut[v >> (STATE_BITS - LUT_BITS)] = i;
         v += multiplier;
     }
-printf("Done\n");
+    printf("Done\n");
 
     STATET multiplier2 = multiplier << MEM_BITS;
     v = 0;
@@ -152,7 +152,6 @@ printf("Done\n");
 
     free(lut);
 #endif
-
 
     return j;
 }
@@ -211,7 +210,7 @@ STATET breach(OUTT v[3], int pos)
                     }
                     break;
                 } else {
-//                     printf("FAIL\n");
+                    //FAIL
                     break;
                 }
             }
@@ -245,7 +244,7 @@ int main(int argc, char **argv) {
     }
 
     for (int retry = 0;  retry < 9; retry++)
-        seed = breach(v+retry, retry);
+        breach(v+retry, retry);
 
     return 0;
 }
