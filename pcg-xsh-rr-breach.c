@@ -205,7 +205,7 @@ STATET breach(OUTT v[3], int pos)
                         do {
                             seed = seed * inv_multiplier - increment;
                         } while(pos--);
-                        printf("\nfound Seed = 0x%"PRIX64"\n", (uint64_t)seed);
+                        printf("\nfound Seed = 0x%"PRIX64"%016"PRIX64"\n", (uint64_t)((unsigned __int128)seed>>64), (uint64_t)seed);
                         exit(0);
                     }
                     break;
