@@ -223,7 +223,8 @@ STATET breach(OUTT v[3], int pos)
 
 int main(int argc, char **argv) {
     STATET state;
-    OUTT v[10];
+#define MAX_RETRY 10
+    OUTT v[3 + MAX_RETRY];
 
     STATET d = 1, c;
     c = egcd(multiplier, -multiplier, &inv_multiplier, &d);
@@ -238,12 +239,12 @@ int main(int argc, char **argv) {
 
     printf("Seed = 0x%"PRIX64"\n", (uint64_t)seed);
     pcg_init(&state, seed);
-    for(int i = 0; i<10; i++) {
+    for(int i = 0; i<3 + MAX_RETRY; i++) {
         v[i] = pcg(&state);
         printf("PCG output %d = 0x%"PRIX64"\n", i, (uint64_t)v[i]);
     }
 
-    for (int retry = 0;  retry < 9; retry++)
+    for (int retry = 0;  retry < MAX_RETRY; retry++)
         breach(v+retry, retry);
 
     return 0;
