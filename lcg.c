@@ -8,16 +8,18 @@
 int main(int argc, char **argv)
 {
     if (argc < 6) {
-        fprintf(stderr, "lcg <bits> <multiplier> <increment> <seed> <count>\n");
+        fprintf(stderr, "lcg <seed bits> <multiplier> <increment> <seed> <count> [<output bits>]\n");
+        fprintf(stderr, "When output bits is set to a value less than bits then the output will be a truncated LCG\n");
         return 1;
     }
-    int bits            = strtoull(argv[1], NULL, 0);
+    uint64_t bits       = strtoull(argv[1], NULL, 0);
     uint64_t multiplier = strtoull(argv[2], NULL, 0);
     uint64_t increment  = strtoull(argv[3], NULL, 0);
     uint64_t seed       = strtoull(argv[4], NULL, 0);
     uint64_t count      = strtoull(argv[5], NULL, 0);
+    uint64_t output_bits= argc == 6 ? bits : strtoull(argv[6], NULL, 0);
 
-    if (bits < 0 || bits > 64) {
+    if (bits > 64 || output_bits > bits) {
         fprintf(stderr, "bad bits\n");
         return 2;
     }
@@ -38,7 +40,7 @@ int main(int argc, char **argv)
     while(count--) {
         seed *= multiplier;
         seed += increment;
-        printf("%"PRIu64"\n", seed & mask);
+        printf("%"PRIu64"\n", (seed & mask) >> (bits - output_bits) );
     }
     return 0;
 }
