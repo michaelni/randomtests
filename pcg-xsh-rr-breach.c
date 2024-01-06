@@ -38,13 +38,11 @@ MIX_BITS are wrong
 
 static const STATET MSB = (STATET)(-1) << EXIT_BITS;
 
-static OUTT rotr(OUTT x, unsigned r)
-{
+static OUTT rotr(OUTT x, unsigned r) {
     return x >> (r & ROTATE_MASK) | x << (-r & ROTATE_MASK);
 }
 
-OUTT pcg(STATET *state)
-{
+static OUTT pcg(STATET *state) {
     STATET x = *state;
     unsigned count = (unsigned)(x >> ROTATE_SRC);
 
@@ -55,14 +53,12 @@ OUTT pcg(STATET *state)
 
 static STATET inv_multiplier = (STATET)0-1;
 
-void pcg_init(STATET *state, STATET seed)
-{
+static void pcg_init(STATET *state, STATET seed) {
     *state = seed + increment;
     (void)pcg(state);
 }
 
-#define FFMIN(a,b) ((a) > (b) ? (b) : (a))
-STATET egcd(STATET a, STATET b, STATET*f, STATET *e) {
+static STATET egcd(STATET a, STATET b, STATET*f, STATET *e) {
     if (b) {
         *f -= *e * (a / b);
         return egcd(b, a % b, e, f);
@@ -70,8 +66,7 @@ STATET egcd(STATET a, STATET b, STATET*f, STATET *e) {
         return a;
 }
 
-static int make_a_table(STATET *table, int bits)
-{
+static int make_a_table(STATET *table, int bits) {
     memset(table, -1, sizeof(*table) * 300);
     int j;
     uint64_t i = 0;
@@ -157,8 +152,7 @@ static int make_a_table(STATET *table, int bits)
 }
 
 
-STATET breach(OUTT v[3], int pos)
-{
+static STATET breach(OUTT v[3], int pos) {
     STATET w[2];
     STATET c, d;
     STATET table[300];
