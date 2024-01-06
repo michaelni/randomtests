@@ -25,7 +25,7 @@ static uint64_t inverse(uint64_t a, uint64_t mask) {
 int main(int argc, char **argv)
 {
     if (argc < 5) {
-        fprintf(stderr, "lcg.breach <bits> <value0> <value1> <value2>\n");
+        fprintf(stderr, "lcg.breach <bits> <value0> <value1> <value2> [<value3>]\n");
         return 1;
     }
     int bits    = strtoull(argv[1], NULL, 0);
@@ -47,6 +47,16 @@ int main(int argc, char **argv)
     uint64_t inv_multiplier = inverse(multiplier, mask) & mask;
     uint64_t increment      = (o1 - o0*multiplier) & mask;
     uint64_t seed           = ((o0 - increment)*inv_multiplier) & mask;
+
+    if (argc > 5) {
+        uint64_t o3 = strtoull(argv[5], NULL, 0);
+        if (((o2 * multiplier + increment) & mask) == o3) {
+            printf("Verified Parameters!\n");
+        } else {
+            fprintf(stderr, "Not a LCG\n");
+            return 2;
+        }
+    }
 
     printf("Seed:       %19"PRIu64" 0x%016"PRIX64"\n", seed, seed);
     printf("Multiplier: %19"PRIu64" 0x%016"PRIX64"\n", multiplier, multiplier);

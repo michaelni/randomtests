@@ -2,7 +2,7 @@
     program to generate random numbers using a Linear Congruential Generator from a specified multiplier, increment, seed and number of bits.
 
 * lcg-breach
-    find the multiplier, increment, seed for a given 3 output numbers from above.
+    find the multiplier, increment, seed for a given 3 output numbers from above. With 4 values it will check them too.
 
 * pcg-xsh-rr-breach
     Code to compute the seed from 2-3 input values (and an extra one for verification) of PCG-XSH-RR-64/32 and PCG-XSH-RR-128/64
