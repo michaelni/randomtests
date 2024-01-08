@@ -40,7 +40,8 @@ int main(int argc, char **argv)
     while(count--) {
         seed *= multiplier;
         seed += increment;
-        printf("%"PRIu64"\n", (seed & mask) >> (bits - output_bits) );
+        uint64_t out = (seed & mask) >> (bits - output_bits);
+        printf("%20"PRIu64" 0x%016"PRIX64"\n", out, out);
     }
     return 0;
 }
