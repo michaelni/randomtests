@@ -1,5 +1,5 @@
 
-all: mooltitestwalker mooltitestcycler mooltitestshaker moolitac pcg-xsh-rr-128-64-breach pcg-xsh-rr-64-32-breach lcg lcg-breach sfc64
+all: mooltitestwalker mooltitestcycler mooltitestshaker moolitac pcg-xsh-rr-128-64-breach pcg-xsh-rr-64-32-breach lcg lcg-breach sfc64 sfc64-breach
 
 pcg-xsh-rr-128-64-breach.o: pcg-xsh-rr-breach.c
 	$(CC) $(CFLAGS) -c -o $@ $< -O3 -Wall -DSTATE_BITS=128
@@ -35,5 +35,8 @@ lcg-breach: lcg-breach.o
 	$(CC) $(LDFLAGS) -o $@ $<
 
 sfc64: sfc64.o
+	$(CC) $(LDFLAGS) -o $@ $< -lm
+
+sfc64-breach: sfc64-breach.o
 	$(CC) $(LDFLAGS) -o $@ $< -lm
 
