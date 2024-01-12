@@ -46,30 +46,37 @@ static int64_t step;
 
 static void breach_step(uint64_t a, uint64_t b, uint64_t prev_c, const uint64_t *o, int depth) {
     uint64_t AMASK = -1ull >> (ABITS + 3);
+    uint64_t b2 = b, a2 = a;
 
+    int cycle;
+    if (depth == 2 || depth == 5) { // access o[0..-5]
+        for (cycle=0; cycle>-5; cycle--) {
+            b2  = a2 ^ (a2>>11); b2 ^= b2>>22; b2 ^= b2>>44;
+            a2  = o[cycle] - b2;
+        }
+    } else { //access o[0..4]
+        for (cycle=0; cycle<3; cycle++) {
+            a2 = b2 ^ (b2>>11);                        //begin of next cycle
+            b2 = o[cycle+2] - a2;                     //look ahead to resolve b
+        }
+    }
 
     for (int ci = 0; ci < 16; ci++) {
         uint64_t c2 = (prev_c & AMASK) | b2c_lut[b>>(64 - ABITS)][ci]; // 3 bits more than in b
-        uint64_t b2 = b, a2 = a;
         uint64_t c = c2;
         //TODO try adding a + 0.5
 
         if (!b2c_lut[b>>(64 - ABITS)][ci])
             continue;
 
-        int cycle;
         if (depth == 2 || depth == 5) { // access o[0..-5]
             for (cycle=0; cycle>-5; cycle--) {
-                b2  = a2 ^ (a2>>11); b2 ^= b2>>22; b2 ^= b2>>44;
-                a2  = o[cycle] - b2;
                 c2 -= o[cycle-1];
                 c2  = c2 >> 24 | c2 << 40;
             }
         } else { //access o[0..4]
             for (cycle=0; cycle<3; cycle++) {
                 c2 = (c2 << 24 | c2 >> 40) + o[cycle]; //end of first cycle
-                a2 = b2 ^ (b2>>11);                        //begin of next cycle
-                b2 = o[cycle+2] - a2;                     //look ahead to resolve b
             }
         }
         step ++;
