@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
         // We also test ff_sfc64_reverse_get() here, this is not needed for computing sfc64 of course
 
         FFSFC64 sfc64_backup= sfc64;
-        printf(base == 10 ? "%20"PRIu64" %20"PRIu64" %20"PRIu64"\n" : "0x%016"PRIX64" 0x%016"PRIX64" 0x%016"PRIX64"\n", sfc64.a, sfc64.b, sfc64.c);
+//         printf(base == 10 ? "%20"PRIu64" %20"PRIu64" %20"PRIu64"\n" : "0x%016"PRIX64" 0x%016"PRIX64" 0x%016"PRIX64"\n", sfc64.a, sfc64.b, sfc64.c);
         uint64_t v = ff_sfc64_get(&sfc64);
         printf(base == 10 ? "%20"PRIu64"\n" : "0x%016"PRIX64"\n", v);
 
