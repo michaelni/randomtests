@@ -90,7 +90,7 @@ static void breach_step(uint64_t a, uint64_t b, uint64_t prev_c, const uint64_t 
         if (depth>5 && (counter=check(&sfc,c,o))) {
             printf("Found (a=0x%016"PRIX64" b=0x%016"PRIX64" c=0x%016"PRIX64" counter=0x%016"PRIX64" original_counter=%d\n", sfc.a,sfc.b,sfc.c, sfc.counter, counter);
             printf("step %"PRId64"\n", step);
-            exit(1);
+            exit(0);
         }
 
         if (depth < 7) {
