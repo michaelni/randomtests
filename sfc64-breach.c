@@ -35,9 +35,11 @@ static int check(FFSFC64 *s, uint64_t prev_c, const uint64_t *o) {
     for (int i= 1; i>=-1; i--)
         if (ff_sfc64_reverse_get(s) != o[i])
             return 0;
+
+    int counter = s->counter;
     while(s->counter > 1)
         ff_sfc64_reverse_get(s);
-    return 1;
+    return counter;
 }
 
 static int64_t step;
@@ -77,8 +79,9 @@ static void breach_step(uint64_t a, uint64_t b, uint64_t prev_c, const uint64_t 
             continue;
 
         FFSFC64 sfc;
-        if (depth>5 && check(&sfc,c,o)) {
-            printf("Found (a=0x%016"PRIX64" b=0x%016"PRIX64" c=0x%016"PRIX64" counter=0x%016"PRIX64"\n", sfc.a,sfc.b,sfc.c, sfc.counter);
+        int counter;
+        if (depth>5 && (counter=check(&sfc,c,o))) {
+            printf("Found (a=0x%016"PRIX64" b=0x%016"PRIX64" c=0x%016"PRIX64" counter=0x%016"PRIX64" original_counter=%d\n", sfc.a,sfc.b,sfc.c, sfc.counter, counter);
             printf("step %"PRId64"\n", step);
             exit(1);
         }
