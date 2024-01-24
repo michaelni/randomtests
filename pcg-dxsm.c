@@ -7,27 +7,20 @@
 typedef unsigned __int128 STATET;
 typedef uint64_t OUTT;
 //const uint64_t multiplier = 15750249268501108917ULL;
-#define SHR1 64
-#define SHR2 32
-#define SHR3 48
 #else
 typedef uint64_t STATET;
 typedef uint32_t OUTT;
 //const uint64_t multiplier = 6364136223846793005ULL;
-#define SHR1 32
-#define SHR2 16
-#define SHR3 24
 #endif
 
 static OUTT pcg_dxsm(STATET *state, uint64_t multiplier, STATET inc) {
     *state = *state * multiplier + inc;
 
-    OUTT l1 = *state | 1;
-    OUTT h1 = *state >> SHR1;
-    OUTT h2 = h1 ^ (h1 >> SHR2);
-    OUTT h3 = h2 * multiplier;
-    OUTT h4 = h3 ^ (h3 >> SHR3);
-    return h4 * l1;
+    OUTT h = *state >>   STATE_BITS / 2;
+    h     ^= h      >>   STATE_BITS / 4;
+    h     *= multiplier;
+    h     ^= h      >> 3*STATE_BITS / 8;
+    return h * (*state | 1);
 }
 
 static unsigned __int128 parse128(const char *s) {
