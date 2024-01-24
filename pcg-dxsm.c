@@ -68,18 +68,25 @@ int main(int argc, char **argv) {
         fprintf(stderr, "%s <multiplier> <increment> <seed> <count> [<base>]\n", *argv);
         return 1;
     }
-    uint64_t multiplier = strtoull(argv[1], NULL, 0);
-    STATET   increment  = parse128(argv[2]);
-    STATET   seed       = parse128(argv[3]);
-    uint64_t count      = strtoull(argv[4], NULL, 0);
-    uint64_t base       = argc  < 6 ? 10 : strtoull(argv[5], NULL, 0);
+    unsigned __int128 multiplier128 = parse128(argv[1]);
+    unsigned __int128 increment128  = parse128(argv[2]);
+    unsigned __int128 seed128       = parse128(argv[3]);
+    uint64_t count                  = strtoull(argv[4], NULL, 0);
+    uint64_t base                   = argc  < 6 ? 10 : strtoull(argv[5], NULL, 0);
+    uint64_t multiplier = multiplier128;
+    STATET increment    = increment128;
+    STATET seed         = seed128;
 
-    if ((STATET)increment != increment) {
-        fprintf(stderr, "increment has more bits than  specified bits\n");
+    if (multiplier128 != multiplier || !multiplier) {
+        fprintf(stderr, "multiplier invalid\n");
         return 2;
     }
-    if ((STATET)seed != seed) {
-        fprintf(stderr, "seed has more bits than  specified bits\n");
+    if (increment128 != increment || (increment%2) == 0) {
+        fprintf(stderr, "increment invalid\n");
+        return 2;
+    }
+    if (seed128 != seed) {
+        fprintf(stderr, "seed out of range\\n");
         return 2;
     }
 
