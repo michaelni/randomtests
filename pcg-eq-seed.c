@@ -89,8 +89,8 @@ int main(int argc, const char **argv) {
     unsigned __int128 multiplier128 = multiplier;
     uint64_t h;
 
-    if (argc < 4) {
-        fprintf(stderr, "%s <seed> <delta> <offset>\n", argv[0]);
+    if (argc < 5) {
+        fprintf(stderr, "%s <seed> <delta> <offset> <mode>\n", argv[0]);
         fprintf(stderr, "Produce 2increments for the given seed and delta with a offset of 1\n");
         exit(1);
     }
@@ -98,44 +98,55 @@ int main(int argc, const char **argv) {
     unsigned __int128 seed = parse128(argv[1]);
     unsigned __int128 delta = parse128(argv[2]);
     int offset = atoi(argv[3]);
+    int mode = atoi(argv[4]);
 
     unsigned __int128 inc0, inc1;
 
+    if (mode == 0) { //direct seed
+        if (offset == 1) {
+            inc0 = delta            - seed*(multiplier - 1);
+    //         inc1 = delta*multiplier - seed*(multiplier - 1);
+        } else if (offset == 2) {
+            unsigned __int128 inv_multiplier_1 = inverse((multiplier + 1) / 2, -1);
+            printf("I: 0x%016"PRIX64" %016"PRIX64"\n", (uint64_t)(inv_multiplier_1>>64), (uint64_t)inv_multiplier_1);
+            inc0 = (seed * (1 - multiplier128 * multiplier) + delta) / 2 * inv_multiplier_1; //TODO this has a 2nd solution due to the /2
+        }
 
-    if (offset == 1) {
-        inc0 = delta            - seed*(multiplier - 1);
-//         inc1 = delta*multiplier - seed*(multiplier - 1);
-    } else if (offset == 2) {
-        unsigned __int128 inv_multiplier_1 = inverse((multiplier + 1) / 2, -1);
-        printf("I: 0x%016"PRIX64" %016"PRIX64"\n", (uint64_t)(inv_multiplier_1>>64), (uint64_t)inv_multiplier_1);
-        inc0 = (seed * (1 - multiplier128 * multiplier) + delta) / 2 * inv_multiplier_1; //TODO this has a 2nd solution due to the /2
-    }
-
-    unsigned __int128 inv = powsum128(multiplier, offset-1);
-    //NOTE powsum128 appears to have exactly as many factors of 2 as offset (tested upto 200000) i should think about this its likely very logic why
+        unsigned __int128 inv = powsum128(multiplier, offset-1);
+        //NOTE powsum128 appears to have exactly as many factors of 2 as offset (tested upto 200000) i should think about this its likely very logic why
 
 
-//         printf("I: 0x%016"PRIX64" %016"PRIX64"\n", (uint64_t)(inv>>64), (uint64_t)inv);
-    int f2 = 1;
-    while (inv % 2 == 0) {
-        inv /= 2; //NOTE we have 2 solutions here as teh MSB is not known
-        f2 *= 2;
-    }
-    inv = inverse(inv, -1);
+    //         printf("I: 0x%016"PRIX64" %016"PRIX64"\n", (uint64_t)(inv>>64), (uint64_t)inv);
+        int f2 = 1;
+        while (inv % 2 == 0) {
+            inv /= 2; //NOTE we have 2 solutions here as teh MSB is not known
+            f2 *= 2;
+        }
+        inv = inverse(inv, -1);
 printf("inv: 0x%016"PRIX64" %016"PRIX64" %d\n", (uint64_t)(inv>>64), (uint64_t)inv, f2);
-    inc0 = seed + delta - seed * pow128(multiplier, offset);
+        inc0 = seed + delta - seed * pow128(multiplier, offset);
 
 
 printf("preinv: 0x%016"PRIX64" %016"PRIX64"\n", (uint64_t)(inc0>>64), (uint64_t)inc0);
 if (inc0 % f2)
     printf("non zero reminder \n");
 
-    inc0 = inc0 / f2 * inv;
+        inc0 = inc0 / f2 * inv;
 
-    inc1 = seed;
-    for(int i = 0; i<offset+1; i++)
-        inc1 = inc1*multiplier + inc0;
-    inc1 -= seed*multiplier + delta;
+        inc1 = seed;
+        for(int i = 0; i<offset+1; i++)
+            inc1 = inc1*multiplier + inc0;
+        inc1 -= seed*multiplier + delta;
+    } else { //numpy legacy seed
+//         unsigned __int128 num = delta*multiplier - delta*pow128(multiplier, 2) + seed*multiplier - seed - delta;
+//         unsigned __int128 den = multiplier - 1 - multiplier*multiplier128;
+//         den = inverse(den, -1);
+//
+//         inc0 = num * den;
+//         inc1 = inc0*multiplier + seed + inc0*inv_multiplier - seed*inv_multiplier -delta*inv_multiplier;
+        inc0 = (delta*multiplier - seed*multiplier + seed) * inverse(multiplier, -1);
+        inc1 =  seed*multiplier + inc0*multiplier + inc0 - delta - seed;
+    }
 
     if (inc0 % 2 == 0 || inc1 % 2 == 0) {
         fprintf(stderr, "failure due to even increment\n");
@@ -146,6 +157,10 @@ if (inc0 % f2)
 
     unsigned __int128 seed0 = seed;
     unsigned __int128 seed1 = seed;
+    if(mode) {
+        seed0 += inc0;
+        seed1 += inc1;
+    }
     for(int i = 0; i<10; i++) {
         printf("v0: 0x%016"PRIX64" %016"PRIX64"   ", (uint64_t)(seed0>>64), (uint64_t)seed0);
         printf("v1: 0x%016"PRIX64" %016"PRIX64"\n", (uint64_t)(seed1>>64), (uint64_t)seed1);
