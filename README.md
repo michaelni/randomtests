@@ -7,6 +7,9 @@
 * pcg-xsh-rr-breach
     Code to compute the seed from 2-3 input values (and an extra one for verification) of PCG-XSH-RR-64/32 and PCG-XSH-RR-128/64
 
+* pcg-correlation-check
+    Tool to search for correlated streams in random increments / seeds for PCG-DXSM (128bit seed / increment, 64bit output)
+
 * moolitac
     Search Mooltipass Accelerometer data for values clipped to max or min
 
