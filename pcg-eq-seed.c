@@ -1,3 +1,6 @@
+
+// This code is Work in progress and has not been properly cleaned up, iam releasing it mainly as it works and i probably wont spend more time on it
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
