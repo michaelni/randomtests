@@ -378,6 +378,8 @@ static int check2(STATET inc1, STATET inc2, STATET seed1, STATET seed2, int inde
         stats[best] = -1;
     }
     printf("\n");
+
+    return 0;
 }
 
 static int check(STATET inc1, STATET inc2, STATET seed1, STATET seed2, STATET random_offset) {
