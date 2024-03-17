@@ -378,6 +378,7 @@ static int check2(STATET inc1, STATET inc2, STATET seed1, STATET seed2, int inde
         stats[best] = -1;
     }
     printf("\n");
+    fflush(stdout);
 
     return 0;
 }
@@ -402,6 +403,7 @@ static int check(STATET inc1, STATET inc2, STATET seed1, STATET seed2, STATET ra
            (uint64_t)((seed1)>>64), (uint64_t)(seed1), (uint64_t)((inc1)>>64), (uint64_t)(inc1),
            (uint64_t)((seed2)>>64), (uint64_t)(seed2), (uint64_t)((inc2)>>64), (uint64_t)(inc2)
           );
+    fflush(stdout);
 
     for (int i = LOG2_STATN; i >= 2; i -= 2)
         pbinomial(stream_length, 16*stream_length/(10<<i) + stream_length / 1024, 1.0/(1<<i), P_CORRECTION); // force table to be initialized
