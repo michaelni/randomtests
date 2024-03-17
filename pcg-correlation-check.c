@@ -200,7 +200,6 @@ long double sum_binomial(int64_t N, int64_t K, long double p) {
 #define MAX_DEPTH 40*9
     static long double *cache[MAX_DEPTH];
     static int64_t max_k[MAX_DEPTH], mid_k[MAX_DEPTH];
-    static long double table_p[MAX_DEPTH];
     int log2_N = log2(N);
     int log2_P = -log2(p);
     int idx = 9*log2_N + log2_P/2 - 1;
