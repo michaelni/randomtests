@@ -83,7 +83,7 @@ static int compar(const STATET *a, const STATET *b){
     STATET ca = a[1];
     STATET cb = b[1];
 
-    STATET high_mask = (0xFFFFFFFF>>topbits) * 0x100000001ULL;
+    STATET high_mask = (0xFFFFFFFFLL>>topbits) * 0x100000001ULL;
     STATET mask = (high_mask<<64) + 0x0000000000000000;
     ca &= mask;
     cb &= mask;
